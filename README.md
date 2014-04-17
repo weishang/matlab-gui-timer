@@ -3,10 +3,7 @@ matlab-gui-timer
 
 matlab gui with automatic update using timer object
 
-A digital clock as a quick demo to show the basic 'componenets'. 
+A digital clock as a quick demo to show the basic 'componenets', with a push button to resume/pause the exeuction of the update. 
 
 
 
-to do
------
-* add the pause/start button 
