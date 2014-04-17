@@ -22,7 +22,7 @@ function varargout = gui_timer_demo(varargin)
 
 % Edit the above text to modify the response to help gui_timer_demo
 
-% Last Modified by GUIDE v2.5 11-Apr-2014 21:38:51
+% Last Modified by GUIDE v2.5 16-Apr-2014 22:23:36
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -73,48 +73,42 @@ timer_obj = timer(...
 % save the timer object as application data
 setappdata(hObject, 'timer_obj', timer_obj);                 % need to save it because we need to stop and delete it when quit
 
+set(handles.pb_resume_pause, 'string', 'Pause');
+
 start(timer_obj);
-
-
-% UIWAIT makes gui_timer_demo wait for user response (see UIRESUME)
-% uiwait(handles.gui_timer_demo);
 
 
 % --- Outputs from this function are returned to the command line.
 function varargout = gui_timer_demo_OutputFcn(hObject, eventdata, handles) 
-% varargout  cell array for returning output args (see VARARGOUT);
-% hObject    handle to figure
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Get default command line output from handles structure
 varargout{1} = handles.output;
-
 
 % --- Executes when user attempts to close gui_timer_demo.
 function gui_timer_demo_CloseRequestFcn(hObject, eventdata, handles)
-% hObject    handle to gui_timer_demo (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+stop(getappdata(hObject, 'timer_obj'));     % stop the timer 
+delete(getappdata(hObject, 'timer_obj'));   % delete the timer 
+delete(hObject);                            % delete the gui
 
-% Hint: delete(hObject) closes the figure
-stop(getappdata(hObject, 'timer_obj')); 
-delete(getappdata(hObject, 'timer_obj'));
-delete(hObject);
-
+% --- Executes on button press in pb_resume_pause.
+function pb_resume_pause_Callback(hObject, eventdata, handles)
+timer_obj = getappdata(gcf, 'timer_obj');
+switch get(timer_obj, 'running' ) 
+    case 'off',
+        set(handles.pb_resume_pause, 'string', 'Pause');
+        start(timer_obj);
+    case 'on',
+        set(handles.pb_resume_pause, 'string', 'Resume');
+        stop(timer_obj);
+end        
 
 function user_timer_update(src,evt, fig_handle)
-
-
 handles = guihandles(fig_handle);
 set(handles.lbl_timeNow, 'string', datestr(now, 'yyyy-mm-dd HH:MM:SS'));
 
-
 function user_timer_start(src, evt)
-disp('Timer started!');
+disp('Timer was started!');
 
 function user_timer_stop(src, evt)
-disp('Timer stop');
+disp('Timer was stopped.');
 
 function user_timer_err(src, evt)
-disp('Timer error');
+disp('Timer error.');
